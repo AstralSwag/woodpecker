@@ -1,3 +1,4 @@
+import random
 import telebot
 import requests
 import schedule
@@ -12,6 +13,8 @@ CHAT_ID = os.getenv('CHAT_ID')
 URL_GET_HERO = os.getenv('URL_GET_HERO')
 TIME1 = os.getenv('TIME1')
 TIME2 = os.getenv('TIME2')
+
+
 
 # Инициализация бота
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
@@ -46,8 +49,26 @@ def check_issues_and_notify():
         mention = ", ".join(resp)  # Преобразуем список в строку, разделяя элементы запятой
     else:
         mention = "дежурный"
+
+        # Список вариаций сообщений
+    MESSAGE_VARIANTS = [
+    "Коллеги! По Зелёнке у нас висит {count} не закрытых задач. Это не круто! {mention}, в бой https://zrp.okdesk.ru/",
+    "Внимание! У нас {count} нерешённых задач в Зелёнке. {mention}, давайте разберёмся: https://zrp.okdesk.ru/",
+    "Эй, команда! В Зелёнке накопилось {count} задач. {mention}, пора действовать: https://zrp.okdesk.ru/",
+    "Ого! {count} задач ждут своего часа в Зелёнке. {mention}, за работу: https://zrp.okdesk.ru/",
+    "Коллеги, {count} задач в Зелёнке требуют внимания. {mention}, вперёд: https://zrp.okdesk.ru/",
+    "Упс! В Зелёнке {count} задач ещё не закрыты. {mention}, давайте исправим: https://zrp.okdesk.ru/",
+    "Эй-эй! {count} задач в Зелёнке ждут нас. {mention}, за дело: https://zrp.okdesk.ru/",
+    "Коллеги, {count} задач в Зелёнке — это слишком! {mention}, в бой: https://zrp.okdesk.ru/",
+    "Внимание! {count} задач в Зелёнке требуют решения. {mention}, пора взяться: https://zrp.okdesk.ru/",
+    "Ого-го! {count} задач в Зелёнке. {mention}, давайте разберёмся: https://zrp.okdesk.ru/"
+]
+    
     if count is not None and count > 10:
-        bot.send_message(CHAT_ID, f"Коллеги! По Зелёнке у нас висит {count} не закрытых задач. Это не круто!! {mention}, в бой https://zrp.okdesk.ru/")
+        # Выбираем случайное сообщение из списка
+        message = random.choice(MESSAGE_VARIANTS).format(count=count, mention=mention)
+        bot.send_message(CHAT_ID, message)
+
 
 # Планирование проверок
 schedule.every().day.at(TIME1).do(check_issues_and_notify)
