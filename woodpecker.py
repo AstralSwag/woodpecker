@@ -33,7 +33,7 @@ def get_duty():
     try:
         response = requests.get(URL_GET_HERO)
         response.raise_for_status()
-        return response
+        return response.json()
     except requests.exceptions.RequestException as e:
         print(f"Ошибка при выполнении запроса: {e}")
         return None
