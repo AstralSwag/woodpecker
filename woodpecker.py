@@ -17,7 +17,7 @@ TIME2 = os.getenv('TIME2')
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 
 def get_issues_count(token):
-    url = f"https://zrp.okdesk.ru/api/v1/issues/list?api_token={token}&assignee_ids[]=22"
+    url = f"https://zrp.okdesk.ru/api/v1/issues/list?api_token={token}&assignee_ids[]=22&status_codes[]=opened&status_codes[]=in_progress"
     
     try:
         response = requests.get(url)
