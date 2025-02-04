@@ -9,6 +9,7 @@ load_dotenv()
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 TICKET_SYSTEM_TOKEN = os.getenv('TICKET_SYSTEM_TOKEN')
 CHAT_ID = os.getenv('CHAT_ID')
+URL_GET_HERO = os.getenv('URL_GET_HERO')
 
 # Инициализация бота
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
@@ -25,10 +26,26 @@ def get_issues_count(token):
         print(f"Ошибка при выполнении запроса: {e}")
         return None
 
+def get_duty():
+    
+    try:
+        response = requests.get(URL_GET_HERO)
+        response.raise_for_status()
+        return response
+    except requests.exceptions.RequestException as e:
+        print(f"Ошибка при выполнении запроса: {e}")
+        return None
+
 def check_issues_and_notify():
     count = get_issues_count(TICKET_SYSTEM_TOKEN)
+    resp = get_duty()
+
+    if resp:
+        mention = ", ".join(resp)  # Преобразуем список в строку, разделяя элементы запятой
+    else:
+        mention = "дежурный"
     if count is not None and count > 10:
-        bot.send_message(CHAT_ID, f"Коллеги! По Зелёнке у нас висит {count} не закрытых задач. Это не круто!! Дежурный, в бой https://zrp.okdesk.ru/")
+        bot.send_message(CHAT_ID, f"Коллеги! По Зелёнке у нас висит {count} не закрытых задач. Это не круто!! {mention}, в бой https://zrp.okdesk.ru/")
 
 # Планирование проверок
 schedule.every().day.at("08:00").do(check_issues_and_notify)
