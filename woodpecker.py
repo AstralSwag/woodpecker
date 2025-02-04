@@ -10,6 +10,8 @@ TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 TICKET_SYSTEM_TOKEN = os.getenv('TICKET_SYSTEM_TOKEN')
 CHAT_ID = os.getenv('CHAT_ID')
 URL_GET_HERO = os.getenv('URL_GET_HERO')
+TIME1 = os.getenv('TIME1')
+TIME2 = os.getenv('TIME2')
 
 # Инициализация бота
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
@@ -48,8 +50,8 @@ def check_issues_and_notify():
         bot.send_message(CHAT_ID, f"Коллеги! По Зелёнке у нас висит {count} не закрытых задач. Это не круто!! {mention}, в бой https://zrp.okdesk.ru/")
 
 # Планирование проверок
-schedule.every().day.at("08:00").do(check_issues_and_notify)
-schedule.every().day.at("20:14").do(check_issues_and_notify)
+schedule.every().day.at(TIME1).do(check_issues_and_notify)
+schedule.every().day.at(TIME2).do(check_issues_and_notify)
 
 # Запуск планировщика
 while True:
