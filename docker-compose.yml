@@ -1,17 +1,16 @@
-version: '3.8'
-
 services:
-  it4bot:
-    image: astralswag/it4retail-duty-bot
-    container_name: it4bot
+  woodpecker:
+    build: .
+    image: woodpecker
+    container_name : woodpecker
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TICKET_SYSTEM_TOKEN=${TICKET_SYSTEM_TOKEN}
+      - CHAT_ID=${CHAT_ID}
+      - TIME1=${TIME1}
+      - TIME2=${TIME2}
+      - URL_GET_HERO =${URL_GET_HERO}'
     restart: always
-    env_file:
-      - /home/das/.docker/it4bot/.env
-    volumes:
-      - /var/log/docker/it4bot:/app/logs
-      - /home/das/.docker/it4bot/config:/app/config
-    ports:
-      - "22123:22123"
     networks:
       - n8n_mynetwork
 
