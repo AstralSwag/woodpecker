@@ -45,8 +45,8 @@ def check_issues_and_notify():
     count = get_issues_count(TICKET_SYSTEM_TOKEN)
     resp = get_duty()
 
-    if resp:
-        mention = ", ".join(resp)  # Преобразуем список в строку, разделяя элементы запятой
+    if resp and "json" in resp:  # Проверяем, что resp содержит ключ "json"
+        mention = ", ".join(resp["json"])
     else:
         mention = "дежурный"
 
